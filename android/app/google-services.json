@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "787743984476",
+    "project_id": "onthreeapp",
+    "storage_bucket": "onthreeapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:787743984476:android:4a85237da81b2041454f99",
+        "android_client_info": {
+          "package_name": "com.onthree"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "787743984476-29te8ajdkmnt3tkionvo9er1f4o9m09l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.onthree",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "787743984476-jsb1cbsaouaafu7iihd6ed002rm9en53.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.onthree",
+            "certificate_hash": "b6b924b6b5ab7c3dd2906a79e6a1b8bec21e7595"
+          }
+        },
+        {
+          "client_id": "787743984476-mvfiqqhoi8sit56dgc9agekskuve0iro.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3kEBD43EbUpCuzFFOgnj2m_dwz1vUrL0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "787743984476-mvfiqqhoi8sit56dgc9agekskuve0iro.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "787743984476-rhrb81hadk011rkndvgcl5133caoajui.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.app.onthree"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

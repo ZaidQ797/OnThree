@@ -1,0 +1,30 @@
+diff --git a/node_modules/react-native-swiper/src/index.js b/node_modules/react-native-swiper/src/index.js
+index 3e63ca7..65274da 100644
+--- a/node_modules/react-native-swiper/src/index.js
++++ b/node_modules/react-native-swiper/src/index.js
+@@ -41,21 +41,20 @@ const styles = {
+ 
+   pagination_x: {
+     position: 'absolute',
+-    bottom: 25,
+     left: 0,
+     right: 0,
+     flexDirection: 'row',
+     flex: 1,
+-    justifyContent: 'center',
+-    alignItems: 'center',
++    top:-10,
++    marginLeft:20,
+     backgroundColor: 'transparent'
+   },
+ 
+   pagination_y: {
+     position: 'absolute',
+     right: 15,
+-    top: 0,
+-    bottom: 0,
++    top: 10,
++    bottom: 10,
+     flexDirection: 'column',
+     flex: 1,
+     justifyContent: 'center',

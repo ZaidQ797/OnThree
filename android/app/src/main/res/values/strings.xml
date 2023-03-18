@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">OnThree</string>
+    <string name="facebook_app_id">702152611630220</string>
+<string name="fb_login_protocol_scheme">fb702152611630220</string>
+<string name="facebook_client_token">bd347e6a9b699914ad00f1e2d9026a6b</string>
+</resources>

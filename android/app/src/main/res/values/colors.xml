@@ -1,0 +1,6 @@
+<resources>
+    <color name="bootsplash_background">#ffff</color>
+    <color name="colorPrimary">#fff</color>
+    <color name="colorAccent">#E91E63</color>
+    <color name="ic_launcher_background">#ffff</color>
+</resources>
