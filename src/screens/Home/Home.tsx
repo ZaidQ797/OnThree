@@ -1,82 +1,299 @@
-import { LoadingOverlay, VideoPlayer } from '@components';
-import { useAppSelector } from '@hooks';
-import { KeychainService } from '@services';
-import useVideos from 'hooks/useVideos';
-import React, { useEffect, useRef, useState } from 'react';
-import { View, FlatList, Dimensions } from 'react-native';
+import { useAppTheme } from '@hooks';
+import PagerView from 'react-native-pager-view';
+import React, {
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  Dimensions,
+  RefreshControl,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
+import Animated from 'react-native-reanimated';
+const buttons = ['Following', 'Featured'];
 
-const Home = () => {
-  const [posts, setPosts] = useState([
-    { url: 'https://www.w3schools.com/html/mov_bbb.mp4', id: 0 },
-    {
-      id: 1,
-      url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    },
-    {
-      id: 2,
-      url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-    },
-    {
-      id: 3,
-      url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-    },
-    {
-      id: 4,
-      url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-    },
-  ]);
+import useVideos from 'hooks/useVideos';
+import { Box, LoadingOverlay, Text, VideoPlayer } from '@components';
+import { ScrollView } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/Ionicons';
+import theme from 'theme';
+import { spacing } from '@shopify/restyle';
+import useAppSelctor from 'hooks/useAppSelector';
+import { Avatar, ButtonGroup } from '@rneui/base';
+import Entypo from 'react-native-vector-icons/Entypo';
+import { buildAnimation } from 'utils/functions';
+const AVATAR =
+  'https://t3.ftcdn.net/jpg/05/00/54/28/360_F_500542898_LpYSy4RGAi95aDim3TLtSgCNUxNlOlcM.jpg';
+
+const AnimatedBox = Animated.createAnimatedComponent(Box);
+const Home: React.FC = ({ navigation }: any) => {
+  const viewPagerRef: MutableRefObject<any> = useRef();
+  const [opacity, setOpacity] = useState(0);
+  const [isPaused, setIsPaused] = useState(true);
+  const [activePage, setActivePage] = useState(0);
+  const { colors, spacing } = useAppTheme();
   const [page, setPage] = useState(1);
-  const { token, user } = useAppSelector(state => state.auth);
-  const { data, isLoading, isError, error } = useVideos(token, user?.id, page);
-  const mediaRefs = useRef([]);
-  // console.log(data?.data?.user.data);
-  const onViewableItemsChanged = useRef(({ changed }: any) => {
-    changed.forEach((element: any) => {
-      const cell = mediaRefs.current[element.key];
-      if (cell) {
-        if (element.isViewable) {
-          // cell?.play();
-        } else {
-          // cell?.pause();
-        }
-      }
-    });
-  });
+  const { token, user } = useAppSelctor(state => state.auth);
+  const { data, isError, error, isLoading } = useVideos(page);
+  const [refreshing, setRefreshing] = useState(false);
+  const [selectedButton, setSelectedBtn] = useState(0);
+  const onPageSelected = useCallback(e => {
+    setActivePage(e.nativeEvent.position);
+    setIsPaused(false);
+  }, []);
+
+  const onLoadStart = async () => {
+    setOpacity(1);
+  };
+
+  const onLoad = () => {
+    setOpacity(0);
+  };
+
+  const onBuffer = ({ isBuffering }) => {
+    setOpacity(isBuffering ? 1 : 0);
+  };
+
+  const onRefresh = () => {};
   return (
-    <View>
+    <ScrollView
+      contentContainerStyle={styles.main}
+      scrollEnabled={false}
+      refreshControl={
+        <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+      }
+    >
       {isLoading ? (
-        <LoadingOverlay />
+        <LoadingOverlay size="large" color={colors.textOnPrimary} />
       ) : (
-        <FlatList
-          data={posts}
-          windowSize={4}
-          initialNumToRender={0}
-          maxToRenderPerBatch={2}
-          removeClippedSubviews
-          viewabilityConfig={{
-            itemVisiblePercentThreshold: 0,
-          }}
-          renderItem={({ item, index }) => (
-            <VideoPlayer item={item} index={index} mediaRefs={mediaRefs} />
-          )}
-          pagingEnabled
-          keyExtractor={item => item?.url}
-          decelerationRate={'normal'}
-          onViewableItemsChanged={onViewableItemsChanged.current}
-        />
-        // <FlatList
-        //   data={posts}
-        //   renderItem={({ item, index }) => (
-        //     <VideoPlayer item={item} index={index} />
-        //   )}
-        //   showsVerticalScrollIndicator={false}
-        //   snapToInterval={Dimensions.get('window').height}
-        //   snapToAlignment={'start'}
-        //   decelerationRate={'fast'}
-        // />
+        <PagerView
+          style={styles.main}
+          orientation="vertical"
+          onPageSelected={onPageSelected}
+          ref={viewPagerRef}
+        >
+          {data?.data?.user?.data?.map((feed: any, index: number) => (
+            <TouchableWithoutFeedback onPress={() => setIsPaused(!isPaused)}>
+              <View key={feed.id} style={styles.pageContainer}>
+                <VideoPlayer
+                  item={feed}
+                  isPaused={isPaused}
+                  activePage={activePage}
+                  onLoad={onLoad}
+                  index={index}
+                  onLoadStart={onLoadStart}
+                  onBuffer={onBuffer}
+                />
+                <AnimatedBox
+                  flex={1}
+                  entering={buildAnimation(1)}
+                  style={[styles.header, { top: spacing.xxxl }]}
+                >
+                  <Icon
+                    onPress={() => {
+                      Alert.alert('Coming Soon');
+                    }}
+                    name="search"
+                    size={30}
+                    color={theme.colors.textOnPrimary}
+                  />
+                  <ButtonGroup
+                    onPress={index => {
+                      setSelectedBtn(index);
+                    }}
+                    selectedIndex={selectedButton}
+                    buttons={buttons}
+                    textStyle={{ color: colors.textOnPrimary }}
+                    selectedTextStyle={{ color: colors.primary }}
+                    containerStyle={styles.buttonGroup}
+                    selectedButtonStyle={{
+                      borderTopLeftRadius: selectedButton === 0 ? 7 : 0,
+                      borderBottomLeftRadius: selectedButton === 0 ? 7 : 0,
+                      borderTopRightRadius: selectedButton === 1 ? 7 : 0,
+                      borderBottomRightRadius: selectedButton === 1 ? 7 : 0,
+                      backgroundColor: 'white',
+                    }}
+                  />
+                  {token ? (
+                    <Avatar
+                      size={50}
+                      avatarStyle={{ borderRadius: 25 }}
+                      source={{
+                        uri: user?.profile_image || AVATAR,
+                      }}
+                    />
+                  ) : (
+                    <Text
+                      color="textOnPrimary"
+                      style={styles.login}
+                      onPress={() => {
+                        navigation.navigate('Login');
+                      }}
+                    >
+                      Login
+                    </Text>
+                  )}
+                </AnimatedBox>
+
+                <Box style={[styles.footer, { bottom: spacing.xxl }]}>
+                  <Entypo
+                    onPress={() => {}}
+                    name="chevron-small-up"
+                    size={40}
+                    color={colors.textOnPrimary}
+                    style={styles.chevron}
+                  />
+                  <Text
+                    color="textOnPrimary"
+                    style={styles.title}
+                    onPress={() => {
+                      navigation.navigate('Login');
+                    }}
+                  >
+                    {feed?.title || ''}
+                  </Text>
+                  <Box flexDirection="row">
+                    <Avatar
+                      size={45}
+                      avatarStyle={{
+                        borderRadius: 25,
+                      }}
+                      source={{
+                        uri:
+                          feed?.user_details?.profile_image ||
+                          'https://t3.ftcdn.net/jpg/05/00/54/28/360_F_500542898_LpYSy4RGAi95aDim3TLtSgCNUxNlOlcM.jpg',
+                      }}
+                    />
+                    <Text color="textOnPrimary" style={styles.posterName}>
+                      {feed?.user_details?.first_name +
+                        ' ' +
+                        feed?.user_details?.last_name || ''}
+                    </Text>
+                  </Box>
+                </Box>
+                {!isPaused && (
+                  <ActivityIndicator
+                    animating
+                    size="large"
+                    color={colors.textOnPrimary}
+                    style={[styles.activityIndicator, { opacity: opacity }]}
+                  />
+                )}
+                {isPaused && (
+                  <Animated.Image
+                    style={[styles.playBtn]}
+                    source={require('@assets/icons/play.png')}
+                  />
+                )}
+              </View>
+            </TouchableWithoutFeedback>
+          ))}
+        </PagerView>
       )}
-    </View>
+    </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  main: {
+    flex: 1,
+    backgroundColor: 'black',
+  },
+  buttonGroup: {
+    width: '40%',
+    height: 30,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    borderColor: 'transparent',
+    borderRadius: 7,
+    borderWidth: 0,
+  },
+  title: {
+    fontSize: 20,
+    letterSpacing: 0.5,
+    fontWeight: '700',
+    marginVertical: 10,
+  },
+  sideBar: {
+    position: 'absolute',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '14%',
+    height: '50%',
+    right: '2%',
+    bottom: 110,
+  },
+  chevron: { alignSelf: 'center', bottom: spacing.m },
+  posterName: {
+    fontSize: 17,
+    letterSpacing: 0.5,
+    fontWeight: '500',
+    alignSelf: 'center',
+    marginLeft: 10,
+  },
+  login: {
+    fontSize: 17,
+    letterSpacing: 0.5,
+    fontWeight: '500',
+  },
+
+  header: {
+    position: 'absolute',
+    left: 10,
+    right: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '95%',
+  },
+  footer: {
+    position: 'absolute',
+    left: 20,
+    right: 10,
+    width: '95%',
+  },
+  activityIndicator: {
+    position: 'absolute',
+    top: Dimensions.get('window').height / 2,
+    left: 70,
+    right: 70,
+    height: 50,
+  },
+
+  video: {
+    height: Dimensions.get('window').height,
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+  },
+  pageContainer: {
+    flex: 1,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+    top: 0,
+  },
+  playBtn: {
+    position: 'absolute',
+    width: 82,
+    height: 82,
+    alignSelf: 'center',
+    resizeMode: 'contain',
+    top: Dimensions.get('window').height / 2,
+    opacity: 0.5,
+  },
+  feedContent: {
+    position: 'absolute',
+    flexDirection: 'column',
+    width: '60%',
+    left: '3%',
+    bottom: 95,
+  },
+});
 
 export default Home;

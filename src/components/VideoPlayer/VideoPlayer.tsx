@@ -1,68 +1,54 @@
-import { useMaterialNavBarHeight } from '@hooks';
-import React, { useState, useRef } from 'react';
-import {
-  View,
-  TouchableWithoutFeedback,
-  Image,
-  StyleSheet,
-  Dimensions,
-} from 'react-native';
+import React from 'react';
+import { StyleSheet, Dimensions } from 'react-native';
 
 import Video from 'react-native-video';
-const feedItemHeight =
-  Dimensions.get('window').height -
-  useMaterialNavBarHeight(Dimensions.get('window').height);
 
-const VideoPlayer = ({ item, index, mediaRefs }: any) => {
-  const [paused, setpaused] = useState(true);
-  const [indexx, setIndex] = useState(false);
-
+const VideoPlayer = ({
+  item,
+  index,
+  activePage,
+  isPaused,
+  onLoad,
+  onLoadStart,
+  onBuffer,
+}: any) => {
   return (
-    <View style={styles.container}>
-      <Video
-        ref={PostSingleRef => (mediaRefs.current[item.id] = PostSingleRef)}
-        source={{
-          uri: item.url,
-        }}
-        style={styles.video}
-        onError={e => console.log(e)}
-        resizeMode={'cover'}
-        repeat={true}
-        muted
-      >
-        <Image source={require('@assets/icons/play.png')} style={styles.play} />
-      </Video>
-    </View>
+    <Video
+      key={index}
+      poster={item.poster}
+      source={{ uri: item.url }}
+      posterResizeMode="cover"
+      resizeMode={'cover'}
+      ignoreSilentSwitch={'obey'}
+      style={styles.video}
+      repeat
+      muted
+      paused={activePage != index || isPaused}
+      onBuffer={onBuffer}
+      onLoadStart={onLoadStart}
+      onLoad={onLoad}
+    />
   );
 };
-
 export default VideoPlayer;
-
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: feedItemHeight,
-    backgroundColor: 'black',
+    height: Dimensions.get('window').height,
   },
-  videoPlayer: {
-    width: '100%',
-    zIndex: 2,
-    flex: 1,
-  },
-  play: {
+  videPlayButton: {
     position: 'absolute',
-    // top: 0,
-    // left: 0,
-    // bottom: 0,
-    // right: 0,
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    zIndex: 100,
   },
-
   video: {
     position: 'absolute',
     top: 0,
     left: 0,
     bottom: 0,
-
     right: 0,
   },
   uiContainer: {

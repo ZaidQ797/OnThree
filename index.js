@@ -7,11 +7,9 @@ import App from './App';
 import { name as appName } from './app.json';
 import React from 'react';
 
-import { Settings } from 'react-native-fbsdk-next';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const HeadlessCheck = ({ isHeadless }) => {
-  Settings.initializeSDK();
   GoogleSignin.configure({
     // scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
     webClientId:

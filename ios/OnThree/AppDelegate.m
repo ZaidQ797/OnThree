@@ -5,12 +5,10 @@
 #import <React/RCTRootView.h>
 #import <React/RCTAppSetupUtils.h>
 #import <React/RCTLinkingManager.h>
-#import <FBSDKCoreKit/FBSDKCoreKit-swift.h>
 #import "RNBootSplash.h" // Bootsplash
 
 #import <Firebase.h> // FCM Push notifications
 #import "RNFBMessagingModule.h"
-#import <FBSDKCoreKit/FBSDKCoreKit-swift.h> // <- Add This Import
 #import <React/RCTLinkingManager.h>
 #if RCT_NEW_ARCH_ENABLED
 #import <React/CoreModulesPlugins.h>
@@ -40,8 +38,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   if ([FIRApp defaultApp] == nil) {
     [FIRApp configure];
   }
-  [[FBSDKApplicationDelegate sharedInstance] application:application
-                       didFinishLaunchingWithOptions:launchOptions];
+ 
   RCTAppSetupPrepareApp(application);
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   #if RCT_NEW_ARCH_ENABLED
@@ -138,9 +135,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
    openURL:(NSURL *)url
    options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
-   return [[FBSDKApplicationDelegate sharedInstance]application:application
-                                                      openURL:url
-                                                      options:options];
+ 
   return [RCTLinkingManager application:application openURL:url options:options];
 }
 

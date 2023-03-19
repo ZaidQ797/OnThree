@@ -4,7 +4,6 @@ import Config from 'react-native-config';
 import { KeychainCredentials, SigninParams } from './types';
 import appAxios from './appAxios';
 import { KeychainService } from '@services';
-import { AccessToken, LoginManager } from 'react-native-fbsdk-next';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import appleAuth from '@invertase/react-native-apple-authentication';
 import { Alert } from 'react-native';
@@ -100,23 +99,23 @@ export const forgetPassword = async (data: any) => {
     }
   });
 };
-const handleFBLogin = async () => {
-  // Attempt a login using the Facebook login dialog asking for default permissions.
-  const result = await LoginManager?.logInWithPermissions([
-    'email',
-    'public_profile',
-  ]);
-  if (result?.isCancelled) {
-    throw 'User cancelled the login process';
-  }
-  // Once signed in, get the users AccesToken
-  const data = await AccessToken?.getCurrentAccessToken();
-  if (data?.accessToken) {
-    return data?.accessToken;
-  } else {
-    return null;
-  }
-};
+// const handleFBLogin = async () => {
+//   // Attempt a login using the Facebook login dialog asking for default permissions.
+//   const result = await LoginManager?.logInWithPermissions([
+//     'email',
+//     'public_profile',
+//   ]);
+//   if (result?.isCancelled) {
+//     throw 'User cancelled the login process';
+//   }
+//   // Once signed in, get the users AccesToken
+//   const data = await AccessToken?.getCurrentAccessToken();
+//   if (data?.accessToken) {
+//     return data?.accessToken;
+//   } else {
+//     return null;
+//   }
+// };
 const googleSignin = async () => {
   try {
     await GoogleSignin.hasPlayServices();
@@ -181,7 +180,6 @@ export default {
   registerUser,
   updateUser,
   signout,
-  handleFBLogin,
   fbInitUser,
   updatePassword,
   forgetPassword,

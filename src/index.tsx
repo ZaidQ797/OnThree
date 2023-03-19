@@ -80,7 +80,7 @@ const App = () => {
                 {token !== '' ? (
                   <RootStack.Screen component={MainUserNavigator} name="Root" />
                 ) : (
-                  <RootStack.Screen component={AuthStackScreens} name="Root" />
+                  <RootStack.Screen component={AuthStackScreens} name="Auth" />
                 )}
               </RootStack.Navigator>
             </BottomSheetModalProvider>

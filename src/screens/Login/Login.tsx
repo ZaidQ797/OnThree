@@ -88,60 +88,7 @@ const Login = ({ navigation, route }: LoginScreenNavigationProps) => {
       });
     setLoading(false);
   };
-  // const googlelogin = async () => {
-  //   try {
-  //     const { idToken, user } = await GoogleSignin.signIn();
-  //     // Create a Google credential with the token
-  //     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-  //     // Sign-in the user with the credential
-  //     auth().signInWithCredential(googleCredential);
-  //     console.log('user', user);
-  //     const data = {
-  //       email: user?.email,
-  //       password: 'onthree',
-  //       login_type: 'google',
-  //     };
-  //   } catch (error) {
-  //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-  //       // user cancelled the login flow
-  //       alert(error);
-  //     } else if (error.code === statusCodes.IN_PROGRESS) {
-  //       alert(error);
 
-  //       // operation (e.g. sign in) is in progress already
-  //     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-  //       // play services not available or outdated
-  //       alert(error);
-  //     } else {
-  //       // some other error happened
-  //       alert(error);
-  //     }
-  //   }
-  // };
-  // const applelogin = async () => {
-  //   const appleAuthRequestResponse = await appleAuth.performRequest({
-  //     requestedOperation: appleAuth.Operation.LOGIN,
-  //     requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-  //   });
-  //   console.log('signed in', appleAuthRequestResponse);
-  //   console.log(appleAuthRequestResponse.email);
-  //   var user_email = appleAuthRequestResponse.email;
-  //   const data = {
-  //     email: user_email,
-  //     password: 'onthree',
-  //     login_type: 'apple',
-  //   };
-  //   // dispatch(loginUser(data, nav));
-
-  //   const credentialState = await appleAuth.getCredentialStateForUser(
-  //     appleAuthRequestResponse.user,
-  //   );
-  //   // use credentialState response to ensure the user is authenticated
-  //   if (credentialState === appleAuth.State.AUTHORIZED) {
-  //     // user is authenticated
-  //     //alert(JSON.stringify(appleAuthRequestResponse));
-  //   }
-  // };
   return (
     <Box
       flex={1}
@@ -151,7 +98,12 @@ const Login = ({ navigation, route }: LoginScreenNavigationProps) => {
       paddingTop="xl"
       paddingHorizontal="m"
     >
-      <ScreenHeader iconRight={'close'} />
+      <ScreenHeader
+        iconRight={'close'}
+        onRightButtonPress={() => {
+          navigation.pop();
+        }}
+      />
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps={'always'}

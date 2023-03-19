@@ -1,10 +1,11 @@
 import appAxios from './appAxios';
 
-const getVideos = async (token: any, userId: any, page: any) => {
+const getVideos = async (page: any, token: any, userId: any) => {
   const formData = new FormData();
-  formData.append('token', token);
-  formData.append('user_id', userId);
+  token && formData.append('token', token);
+  userId && formData.append('user_id', userId);
   formData.append('page', page);
+
   return appAxios.post(`get-all-stories`, formData).then(response => {
     const { data } = response;
     return data;
