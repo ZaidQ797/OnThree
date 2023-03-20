@@ -1,7 +1,9 @@
 import React from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Alert } from 'react-native';
+import { useToast } from 'react-native-toast-notifications';
 
 import Video from 'react-native-video';
+import convertToProxyURL from 'react-native-video-cache';
 
 const VideoPlayer = ({
   item,
@@ -12,21 +14,24 @@ const VideoPlayer = ({
   onLoadStart,
   onBuffer,
 }: any) => {
+  const toast = useToast();
   return (
     <Video
       key={index}
       poster={item.poster}
-      source={{ uri: item.url }}
+      source={{ uri: convertToProxyURL(item.url) }}
       posterResizeMode="cover"
       resizeMode={'cover'}
       ignoreSilentSwitch={'obey'}
       style={styles.video}
       repeat
-      muted
       paused={activePage != index || isPaused}
       onBuffer={onBuffer}
       onLoadStart={onLoadStart}
       onLoad={onLoad}
+      onVideoError={() => {
+        toast.show('Video is not supported', { type: 'danger' });
+      }}
     />
   );
 };

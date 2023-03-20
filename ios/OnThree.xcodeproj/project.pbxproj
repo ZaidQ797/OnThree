@@ -581,7 +581,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = OnThree/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = OnThree;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -615,7 +615,7 @@
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "×86_64";
 				INFOPLIST_FILE = OnThree/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = OnThree;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -138,7 +138,7 @@ const UpdatePassword = ({ navigation, route }: LoginScreenNavigationProps) => {
                     {route?.params?.from === 'profile' && (
                       <AnimatedBox entering={buildAnimation(2)}>
                         <TextInput
-                          icon={require('@assets/icons/lock.png')}
+                          // icon={require('@assets/icons/lock.png')}
                           value={values.password}
                           onChangeText={handleChange('password')}
                           onBlur={handleBlur('password')}
@@ -160,7 +160,7 @@ const UpdatePassword = ({ navigation, route }: LoginScreenNavigationProps) => {
                     )}
                     <AnimatedBox entering={buildAnimation(2)}>
                       <TextInput
-                        icon={require('@assets/icons/lock.png')}
+                        // icon={require('@assets/icons/lock.png')}
                         value={values.newPassword}
                         onChangeText={handleChange('newPassword')}
                         onBlur={handleBlur('newPassword')}

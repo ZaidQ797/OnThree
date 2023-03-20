@@ -140,7 +140,7 @@ const ForgetPassword = ({ navigation, route }: LoginScreenNavigationProps) => {
                     <AnimatedBox entering={buildAnimation(2)}>
                       {!showOTP && (
                         <TextInput
-                          icon={require('@assets/icons/mail.png')}
+                          // icon={require('@assets/icons/mail.png')}
                           tintColor={colors.danger}
                           value={values.email}
                           onChangeText={handleChange('email')}
@@ -161,7 +161,7 @@ const ForgetPassword = ({ navigation, route }: LoginScreenNavigationProps) => {
                     {showOTP && (
                       <AnimatedBox entering={buildAnimation(2)}>
                         <TextInput
-                          icon={require('@assets/icons/lock.png')}
+                          // icon={require('@assets/icons/lock.png')}
                           value={values.otp}
                           tintColor={'danger'}
                           onChangeText={handleChange('otp')}

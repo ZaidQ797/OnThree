@@ -4,6 +4,7 @@ import React, {
   MutableRefObject,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -11,6 +12,8 @@ import {
   ActivityIndicator,
   Alert,
   Dimensions,
+  Linking,
+  Pressable,
   RefreshControl,
   StyleSheet,
   TouchableWithoutFeedback,
@@ -26,11 +29,11 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import theme from 'theme';
 import { spacing } from '@shopify/restyle';
 import useAppSelctor from 'hooks/useAppSelector';
-import { Avatar, ButtonGroup } from '@rneui/base';
+import { Avatar, ButtonGroup, Divider, Image } from '@rneui/base';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { buildAnimation } from 'utils/functions';
-const AVATAR =
-  'https://t3.ftcdn.net/jpg/05/00/54/28/360_F_500542898_LpYSy4RGAi95aDim3TLtSgCNUxNlOlcM.jpg';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import DetailSheet from './Components/DetailSheet';
 
 const AnimatedBox = Animated.createAnimatedComponent(Box);
 const Home: React.FC = ({ navigation }: any) => {
@@ -44,6 +47,8 @@ const Home: React.FC = ({ navigation }: any) => {
   const { data, isError, error, isLoading } = useVideos(page);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedButton, setSelectedBtn] = useState(0);
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const [story, setStory] = useState(null);
   const onPageSelected = useCallback(e => {
     setActivePage(e.nativeEvent.position);
     setIsPaused(false);
@@ -144,7 +149,11 @@ const Home: React.FC = ({ navigation }: any) => {
 
                 <Box style={[styles.footer, { bottom: spacing.xxl }]}>
                   <Entypo
-                    onPress={() => {}}
+                    onPress={async () => {
+                      setStory(feed);
+                      setIsPaused(true);
+                      bottomSheetModalRef.current?.present();
+                    }}
                     name="chevron-small-up"
                     size={40}
                     color={colors.textOnPrimary}
@@ -192,6 +201,13 @@ const Home: React.FC = ({ navigation }: any) => {
                     source={require('@assets/icons/play.png')}
                   />
                 )}
+                <DetailSheet
+                  story={story}
+                  setIsPaused={(paused: any) => {
+                    setIsPaused(paused);
+                  }}
+                  bottomSheetModalRef={bottomSheetModalRef}
+                />
               </View>
             </TouchableWithoutFeedback>
           ))}
@@ -213,6 +229,32 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     borderRadius: 7,
     borderWidth: 0,
+  },
+  likes: {
+    fontSize: 18,
+    letterSpacing: 0.5,
+    fontWeight: '700',
+    alignSelf: 'center',
+    marginLeft: 10,
+  },
+  about: {
+    fontSize: 18,
+    margin: 5,
+    marginTop: 20,
+    color: '#BEBEBE',
+  },
+  aboutDetail: {
+    marginHorizontal: 5,
+    fontSize: 16,
+    fontWeight: '500',
+    letterSpacing: 0.3,
+    marginVertical: 5,
+  },
+  tag: {
+    marginHorizontal: 5,
+    fontSize: 15,
+    fontWeight: '400',
+    letterSpacing: 0.3,
   },
   title: {
     fontSize: 20,

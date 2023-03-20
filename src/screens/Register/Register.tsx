@@ -81,7 +81,10 @@ const Register = ({ navigation, route }: LoginScreenNavigationProps) => {
       paddingTop="xl"
       paddingHorizontal="m"
     >
-      <ScreenHeader iconRight={'close'} />
+      <ScreenHeader
+        iconRight={'close'}
+        onRightButtonPress={() => navigation.pop()}
+      />
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps={'always'}

@@ -73,6 +73,7 @@
     "react-native-touchable-swipe": "^1.0.0",
     "react-native-vector-icons": "^9.1.0",
     "react-native-video": "^5.2.1",
+    "react-native-video-cache": "^2.7.3",
     "react-native-webview": "^11.26.1",
     "react-query": "^3.38.0",
     "react-redux": "^8.0.2",
