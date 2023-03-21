@@ -18,7 +18,7 @@ const VideoPlayer = ({
   return (
     <Video
       key={index}
-      poster={item.poster}
+      poster={item.thumbnail}
       source={{ uri: convertToProxyURL(item.url) }}
       posterResizeMode="cover"
       resizeMode={'cover'}
@@ -35,7 +35,7 @@ const VideoPlayer = ({
     />
   );
 };
-export default VideoPlayer;
+export default React.memo(VideoPlayer);
 const styles = StyleSheet.create({
   container: {
     width: '100%',

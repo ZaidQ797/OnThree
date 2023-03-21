@@ -34,7 +34,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { buildAnimation } from 'utils/functions';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import DetailSheet from './Components/DetailSheet';
-
+const AVATAR = require('@assets/icons/avatar.jpg');
 const AnimatedBox = Animated.createAnimatedComponent(Box);
 const Home: React.FC = ({ navigation }: any) => {
   const viewPagerRef: MutableRefObject<any> = useRef();
@@ -44,11 +44,10 @@ const Home: React.FC = ({ navigation }: any) => {
   const { colors, spacing } = useAppTheme();
   const [page, setPage] = useState(1);
   const { token, user } = useAppSelctor(state => state.auth);
-  const { data, isError, error, isLoading } = useVideos(page);
+  const { data, isError, error, isLoading, refetch } = useVideos(page);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedButton, setSelectedBtn] = useState(0);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const [story, setStory] = useState(null);
   const onPageSelected = useCallback(e => {
     setActivePage(e.nativeEvent.position);
     setIsPaused(false);
@@ -65,7 +64,10 @@ const Home: React.FC = ({ navigation }: any) => {
   const onBuffer = ({ isBuffering }) => {
     setOpacity(isBuffering ? 1 : 0);
   };
-
+  const handlePaused = useCallback(() => {
+    setIsPaused(!isPaused);
+  }, [isPaused]);
+  console.log(data);
   const onRefresh = () => {};
   return (
     <ScrollView
@@ -85,7 +87,7 @@ const Home: React.FC = ({ navigation }: any) => {
           ref={viewPagerRef}
         >
           {data?.data?.user?.data?.map((feed: any, index: number) => (
-            <TouchableWithoutFeedback onPress={() => setIsPaused(!isPaused)}>
+            <TouchableWithoutFeedback onPress={handlePaused}>
               <View key={feed.id} style={styles.pageContainer}>
                 <VideoPlayer
                   item={feed}
@@ -128,6 +130,10 @@ const Home: React.FC = ({ navigation }: any) => {
                   />
                   {token ? (
                     <Avatar
+                      onPress={() => {
+                        setIsPaused(true);
+                        navigation.navigate('ProfileScreen');
+                      }}
                       size={50}
                       avatarStyle={{ borderRadius: 25 }}
                       source={{
@@ -150,7 +156,7 @@ const Home: React.FC = ({ navigation }: any) => {
                 <Box style={[styles.footer, { bottom: spacing.xxl }]}>
                   <Entypo
                     onPress={async () => {
-                      setStory(feed);
+                      // setStory(feed);
                       setIsPaused(true);
                       bottomSheetModalRef.current?.present();
                     }}
@@ -202,10 +208,12 @@ const Home: React.FC = ({ navigation }: any) => {
                   />
                 )}
                 <DetailSheet
-                  story={story}
+                  story={feed}
                   setIsPaused={(paused: any) => {
                     setIsPaused(paused);
                   }}
+                  refetch={refetch}
+                  page={page}
                   bottomSheetModalRef={bottomSheetModalRef}
                 />
               </View>

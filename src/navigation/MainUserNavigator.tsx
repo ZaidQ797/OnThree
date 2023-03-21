@@ -1,10 +1,12 @@
 import React from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Home from 'screens/Home/Home';
+import { HomeScreen, ProfileScreen } from '@screens';
+import GeneralPlayer from 'screens/GeneralPlayer/GeneralPlayer';
 
 export type MainUserStackParamList = {
   HomeScreen: undefined;
+  ProfileScreen: undefined;
 };
 
 const RootStack = createStackNavigator<MainUserStackParamList>();
@@ -14,7 +16,9 @@ const RootStackScreens = () => {
       initialRouteName="HomeScreen"
       screenOptions={{ headerShown: false }}
     >
-      <RootStack.Screen component={Home} name={'HomeScreen'} />
+      <RootStack.Screen component={HomeScreen} name={'HomeScreen'} />
+      <RootStack.Screen component={ProfileScreen} name={'ProfileScreen'} />
+      <RootStack.Screen component={GeneralPlayer} name={'GeneralPlayer'} />
     </RootStack.Navigator>
   );
 };

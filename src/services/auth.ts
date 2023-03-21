@@ -71,10 +71,7 @@ export const updateUser = async (data: any) => {
 export const updatePassword = async (data: any, from: any) => {
   if (from === 'forget') {
     return axios
-      .post(
-        'https://alicoltd.co.uk/app/apis/user/reset_password.php?request=forget',
-        data,
-      )
+      .post(Config.API_URL, data)
       .then(response => {
         return response.data;
       })

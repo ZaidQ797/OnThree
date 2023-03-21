@@ -1,17 +1,29 @@
 import { Box, Text } from '@components';
 import { BottomSheetBackdrop, BottomSheetModal } from '@gorhom/bottom-sheet';
-import { useAppTheme } from '@hooks';
+import { useAppTheme, useStoryMutation } from '@hooks';
 import { useNavigation } from '@react-navigation/native';
 import { Avatar, Divider } from '@rneui/base';
+import { AppService } from '@services';
+import useAppSelctor from 'hooks/useAppSelector';
 import * as React from 'react';
-import { Share, StyleSheet, Image, Dimensions, Pressable, Alert } from 'react-native';
+import {
+  Share,
+  StyleSheet,
+  Image,
+  Dimensions,
+  Pressable,
+  Alert,
+} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import theme from 'theme';
-
+import Snackbar from 'react-native-snackbar';
+import { startConnectionWatcher } from 'hooks/useConnection';
 type DetailSheetProps = {
   story: any;
   bottomSheetModalRef: any;
   setIsPaused?: () => void;
+  refetch?: () => void;
+  page: number;
 };
 const ICON_HEIGHT = 25;
 const ICON_WIDTH = 25;
@@ -22,9 +34,13 @@ const DetailSheet = ({
   story,
   bottomSheetModalRef,
   setIsPaused,
+  page,
 }: DetailSheetProps) => {
   const snapPoints = React.useMemo(() => [800], []);
   const { colors, spacing } = useAppTheme();
+  const { token, user } = useAppSelctor(state => state.auth);
+  const [like, setLike] = React.useState(false);
+  // const storyMutation = useStoryMutation(page, token, user?.id);
   const navigation = useNavigation();
   const onShare = async () => {
     try {
@@ -44,6 +60,32 @@ const DetailSheet = ({
       Alert.alert(error.message);
     }
   };
+  const handleLike = async () => {
+    // if (token) {
+    //   setLike(!like);
+    //   await AppService.likeStory(like ? 1 : 0, story?.id, token, user.id);
+    //   storyMutation.mutate();
+    // } else {
+    //   Alert.alert('OnThree', 'You need to login first', [
+    //     { text: 'Cancel' },
+    //     {
+    //       text: 'OK',
+    //       onPress: () => {
+    //         bottomSheetModalRef?.current?.close();
+    //         navigation.navigate('Login' as never);
+    //       },
+    //     },
+    //   ]);
+    // }
+  };
+  const getIcon = React.useCallback(() => {
+    // const liked = story?.get_story_likes?.find(
+    //   (item: any) => parseInt(item.user_id) === user.id,
+    // );
+    // return liked
+    //   ? require('@assets/icons/filled-like.png')
+    //   : require('@assets/icons/likes.png');
+  }, []);
   return (
     <BottomSheetModal
       ref={bottomSheetModalRef}
@@ -128,26 +170,33 @@ const DetailSheet = ({
                 />
               </Box>
             </Pressable>
-            <Box
-              bg="primary"
-              borderRadius="m"
-              justifyContent="center"
-              alignItems="center"
-              style={{ padding: 15 }}
-              flexDirection="row"
-            >
-              <Image
-                source={require('@assets/icons/likes.png')}
-                style={{
-                  height: ICON_HEIGHT,
-                  width: ICON_WIDTH,
-                  resizeMode: 'contain',
-                }}
-              />
-              <Text color="textOnPrimary" style={styles.likes}>
-                {story?.likes}
-              </Text>
-            </Box>
+            <Pressable onPress={handleLike}>
+              <Box
+                bg="primary"
+                borderRadius="m"
+                justifyContent="center"
+                alignItems="center"
+                style={{ padding: 15 }}
+                flexDirection="row"
+              >
+                <Image
+                  source={
+                    like
+                      ? require('@assets/icons/filled-like.png')
+                      : require('@assets/icons/likes.png')
+                  }
+                  style={{
+                    height: ICON_HEIGHT,
+                    width: ICON_WIDTH,
+                    resizeMode: 'contain',
+                  }}
+                />
+
+                <Text color="textOnPrimary" style={styles.likes}>
+                  {story?.likes}
+                </Text>
+              </Box>
+            </Pressable>
             <Box
               onPress={() => setShowComments(true)}
               bg="primary"
@@ -166,7 +215,7 @@ const DetailSheet = ({
                 }}
               />
               <Text color="textOnPrimary" style={styles.likes}>
-                {story?.likes}
+                {story?.get_story_comment?.length}
               </Text>
             </Box>
             <Box

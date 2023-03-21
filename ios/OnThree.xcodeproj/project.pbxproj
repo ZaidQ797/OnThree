@@ -14,6 +14,7 @@
 		271389EE29C6DDE000E55818 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 271389ED29C6DDE000E55818 /* Ionicons.ttf */; };
 		271389F029C6E9F200E55818 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 271389EF29C6E9F200E55818 /* Entypo.ttf */; };
 		274EB01929C5E7340041643E /* libreact-native-webview.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 274EB01829C5E7340041643E /* libreact-native-webview.a */; };
+		27508D1529CA193A0033C62A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 27508D1429CA193A0033C62A /* GoogleService-Info.plist */; };
 		27569C5829C40CED00EB91BE /* libreact-native-video.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27569C5729C40CED00EB91BE /* libreact-native-video.a */; };
 		278331D0297E5CE0002A0926 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 278331CE297E5CC5002A0926 /* GoogleService-Info.plist */; };
 		278E26E528CF95DC00912253 /* libreact-native-blob-util.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 278E26E428CF95DC00912253 /* libreact-native-blob-util.a */; };
@@ -54,6 +55,7 @@
 		271389EF29C6E9F200E55818 /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		2738D87C298D128400ACF5B7 /* libreact-native-rsa-native.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-rsa-native.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		274EB01829C5E7340041643E /* libreact-native-webview.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-webview.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		27508D1429CA193A0033C62A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		27569C5729C40CED00EB91BE /* libreact-native-video.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-video.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		277A14A7298BCD0600782B74 /* libreact-native-webview.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-webview.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		278331CE297E5CC5002A0926 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 				278331CE297E5CC5002A0926 /* GoogleService-Info.plist */,
 				27C9274F2973CBB10009F134 /* Poppins-Medium.ttf */,
 				27C9274E2973CBB10009F134 /* Poppins-Regular.ttf */,
+				27508D1429CA193A0033C62A /* GoogleService-Info.plist */,
 				27C9274D2973CBB00009F134 /* Poppins-SemiBold.ttf */,
 				27C9275329741B9C0009F134 /* MaterialIcons-Regular.ttf */,
 				13B07FAE1A68108700A75B9A /* OnThree */,
@@ -307,6 +310,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27508D1529CA193A0033C62A /* GoogleService-Info.plist in Resources */,
 				271389F029C6E9F200E55818 /* Entypo.ttf in Resources */,
 				271389EE29C6DDE000E55818 /* Ionicons.ttf in Resources */,
 				278331D0297E5CE0002A0926 /* GoogleService-Info.plist in Resources */,

@@ -9,6 +9,7 @@ import Box from '../Box';
 import Text from '../Text';
 import AppPressable from '../AppPressable';
 import FastImage from 'react-native-fast-image';
+import useAppSelctor from 'hooks/useAppSelector';
 const IMAGE_SIZE = 45;
 const SIDE_ITEMS_SIZE = 25;
 const ICON_SIZE = 25;
@@ -26,6 +27,10 @@ type ScreenHeaderProps = {
   transparent?: boolean;
   headerBackground?: string;
   iconLeft?: JSX.Element;
+  marginTop?: number;
+  marginHorizontal?: number;
+  rightText?: string;
+  centerImg?: boolean;
 };
 const ScreenHeader = ({
   title,
@@ -34,22 +39,36 @@ const ScreenHeader = ({
   onRightButtonPress,
   iconRight,
   onBackButtonPress,
-  isConversation = false,
   isActive = false,
   transparent = false,
   headerBackground,
+  marginTop = 0,
+  marginHorizontal = 0,
+  centerImg = false,
+  rightText = '',
   iconLeft,
 }: ScreenHeaderProps) => {
   const { top } = useSafeAreaInsets();
   const { colors } = useAppTheme();
   const [blur, setBlur] = useState(0);
+  const { token, user } = useAppSelctor(state => state.auth);
   const renderRightIcon = useCallback(() => {
-    if (typeof iconRight === 'string') {
-      return <Icon name={iconRight} size={ICON_SIZE} color={colors.primary} />;
-    } else if (typeof iconRight === 'function') {
-      return iconRight;
+    if (rightText !== '') {
+      return (
+        <Text color="primary" fontSize={15} style={{ alignSelf: 'center' }}>
+          {rightText}
+        </Text>
+      );
     } else {
-      return null;
+      if (typeof iconRight === 'string') {
+        return (
+          <Icon name={iconRight} size={ICON_SIZE} color={colors.primary} />
+        );
+      } else if (typeof iconRight === 'function') {
+        return iconRight;
+      } else {
+        return null;
+      }
     }
   }, [iconRight, onRightButtonPress]);
   return (
@@ -57,10 +76,12 @@ const ScreenHeader = ({
       alignItems="center"
       flexDirection="row"
       style={{
-        paddingTop: Platform.OS == 'android' ? 10 : top - 10,
+        paddingTop: Platform.OS == 'android' ? 10 : top + 10,
         paddingBottom: 50,
         marginBottom: -24,
-        paddingHorizontal: 10,
+        paddingHorizontal: 12,
+        // justifyContent: 'flex-end',
+        // alignItems: 'flex-end',
         backgroundColor: transparent ? transparent : headerBackground,
       }}
     >
@@ -72,46 +93,38 @@ const ScreenHeader = ({
       <AppPressable
         onPress={onBackButtonPress}
         disabled={!showBackButton}
-        containerStyle={styles.sideButton}
+        containerStyle={[
+          styles.sideButton,
+          {
+            // marginTop: marginTop,
+            marginHorizontal: marginHorizontal,
+          },
+        ]}
       >
         {showBackButton && (
-          <Icon
-            name="keyboard-backspace"
-            size={ICON_SIZE}
-            color={colors.headerForeground}
+          <FastImage
+            resizeMode="contain"
+            source={require('@assets/icons/back.png')}
+            style={{ height: 25, width: 25 }}
           />
         )}
         {iconLeft && iconLeft}
       </AppPressable>
       <Box flex={1}>
-        {isConversation ? (
+        {centerImg ? (
           <AnimatedBox entering={SlideInRight.delay(200)}>
-            <Box flexDirection="row" marginLeft="l">
+            <Box flexDirection="row" alignSelf="center">
               <FastImage
                 style={[
                   styles.avatar,
-                  { backgroundColor: colors.imagePlaceholder },
+                  {
+                    backgroundColor: colors.imagePlaceholder,
+                  },
                 ]}
-                source={{ uri: avatar }}
+                source={
+                  token ? { uri: avatar } : require('@assets/icons/avatar.jpg')
+                }
               />
-              <Box>
-                <Text
-                  numberOfLines={1}
-                  adjustsFontSizeToFit
-                  variant="header"
-                  color="neutral"
-                >
-                  {title}
-                </Text>
-                <Text
-                  numberOfLines={1}
-                  adjustsFontSizeToFit
-                  variant="modalTitle"
-                  color="primary"
-                >
-                  {isActive ? 'Active Now' : 'Offline'}
-                </Text>
-              </Box>
             </Box>
           </AnimatedBox>
         ) : (
@@ -133,7 +146,7 @@ const ScreenHeader = ({
         disabled={onRightButtonPress === undefined}
         containerStyle={styles.sideButton}
       >
-        {iconRight !== undefined && renderRightIcon()}
+        {iconRight !== undefined || renderRightIcon()}
       </AppPressable>
     </Box>
   );
